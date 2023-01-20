@@ -9,6 +9,7 @@ import {
   Post,
 } from '@nestjs/common/decorators';
 import { AppService } from './app.service';
+import { CreateReportDTO } from './dtos/report.dto';
 
 @Controller('/report/income')
 export class AppController {
@@ -25,7 +26,7 @@ export class AppController {
   }
 
   @Post()
-  createIncome(@Body() body: { amount: number; source: string }) {
+  createIncome(@Body() body: CreateReportDTO) {
     return this.appService.createIncome(body);
   }
 
