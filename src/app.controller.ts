@@ -1,3 +1,4 @@
+import { ParseIntPipe } from '@nestjs/common';
 import {
   Body,
   Controller,
@@ -19,7 +20,7 @@ export class AppController {
   }
 
   @Get(':id')
-  getIncomeById(@Param('id') id: string) {
+  getIncomeById(@Param('id', ParseIntPipe) id) {
     return this.appService.getIncomeById(id);
   }
 
@@ -30,14 +31,14 @@ export class AppController {
 
   @Patch(':id')
   updateIncome(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: { amount?: number; source?: string },
   ) {
     return this.appService.updateIncome(id, body);
   }
 
   @Delete(':id')
-  deleteIncome(@Param('id') id: string) {
+  deleteIncome(@Param('id', ParseIntPipe) id: number) {
     return this.appService.deleteIncome(id);
   }
 }

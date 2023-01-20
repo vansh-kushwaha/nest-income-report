@@ -4,7 +4,7 @@ export enum ReportType {
 }
 
 export interface Report {
-  id: string;
+  id: number;
   source: string;
   amount: number;
   createdAt: Date;

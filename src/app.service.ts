@@ -6,14 +6,12 @@ export class AppService {
   getAllIncome() {
     return data.report;
   }
-  getIncomeById(id: string) {
+  getIncomeById(id: number) {
     data.report.find((r) => r.id === id) || 'Not Found';
   }
   createIncome(body: { amount: number; source: string }) {
     const newReport: Report = {
-      id: data.report.length
-        ? parseInt(data.report[data.report.length - 1].id) + 1 + ''
-        : '1',
+      id: data.report.length ? data.report[data.report.length - 1].id + 1 : 1,
       type: ReportType.INCOME,
       amount: body.amount,
       source: body.source,
@@ -23,7 +21,7 @@ export class AppService {
     data.report.push(newReport);
     return newReport;
   }
-  updateIncome(id: string, body: { amount?: number; source?: string }) {
+  updateIncome(id: number, body: { amount?: number; source?: string }) {
     const index = data.report.findIndex((r) => r.id === id);
     if (index === -1) return 'Not Found';
 
@@ -35,7 +33,7 @@ export class AppService {
     return data.report[index];
   }
 
-  deleteIncome(id: string) {
+  deleteIncome(id: number) {
     const index = data.report.findIndex((r) => r.id === id);
     if (index === -1) return 'Not Found';
 
