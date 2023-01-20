@@ -7,34 +7,25 @@ import {
   Patch,
   Post,
 } from '@nestjs/common/decorators';
-import { data, Report, ReportType } from './data';
+import { AppService } from './app.service';
 
 @Controller('/report/income')
 export class AppController {
+  constructor(private readonly appService: AppService) {}
+
   @Get()
   getAllIncome() {
-    return data.report;
+    return this.appService.getAllIncome();
   }
 
   @Get(':id')
   getIncomeById(@Param('id') id: string) {
-    return data.report.find((r) => r.id === id) || 'Not Found';
+    return this.appService.getIncomeById(id);
   }
 
   @Post()
   createIncome(@Body() body: { amount: number; source: string }) {
-    const newReport: Report = {
-      id: data.report.length
-        ? parseInt(data.report[data.report.length - 1].id) + 1 + ''
-        : '1',
-      type: ReportType.INCOME,
-      amount: body.amount,
-      source: body.source,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    data.report.push(newReport);
-    return newReport;
+    return this.appService.createIncome(body);
   }
 
   @Patch(':id')
@@ -42,25 +33,11 @@ export class AppController {
     @Param('id') id: string,
     @Body() body: { amount?: number; source?: string },
   ) {
-    const index = data.report.findIndex((r) => r.id === id);
-    if (index === -1) return 'Not Found';
-
-    Object.keys(body).forEach((key) => {
-      data.report[index][key] = body[key];
-    });
-    data.report[index].updatedAt = new Date();
-
-    return data.report[index];
+    return this.appService.updateIncome(id, body);
   }
 
   @Delete(':id')
   deleteIncome(@Param('id') id: string) {
-    const index = data.report.findIndex((r) => r.id === id);
-    if (index === -1) return 'Not Found';
-
-    const deleted = data.report[index];
-    data.report.splice(index, 1);
-
-    return { deleted };
+    return this.appService.deleteIncome(id);
   }
 }
